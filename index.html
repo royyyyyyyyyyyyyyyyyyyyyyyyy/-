@@ -1,0 +1,363 @@
+﻿<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131a">
+  <title>道德經背誦教練</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="ambientCanvas" aria-hidden="true"></canvas>
+  <div id="burstLayer" aria-hidden="true"></div>
+  <div class="modal-layer is-hidden" id="logoutModal" role="dialog" aria-modal="true" aria-labelledby="logoutTitle">
+    <div class="modal-card">
+      <p class="eyebrow">Logout</p>
+      <h3 id="logoutTitle">確定要登出嗎？</h3>
+      <p>你的進度會保存在此裝置，下次可以用同一個玩家繼續。</p>
+      <div class="modal-actions">
+        <button class="plain-button" id="logoutCancel" type="button">取消</button>
+        <button class="primary-action" id="logoutConfirm" type="button">確定登出</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="login-gate" id="loginGate">
+    <div class="gate-art">
+      <img id="gateHeroImage" src="assets/dao-login-bg.webp" alt="經典背誦背景">
+    </div>
+    <form class="gate-panel" id="joinForm">
+      <div class="gate-tools">
+        <button class="small-button lang-toggle" type="button" data-lang-toggle>語文：繁</button>
+      </div>
+      <p class="eyebrow">Memory Coach</p>
+      <h1 id="gateTitle">道德經背誦教練</h1>
+      <p class="drop-note" id="gateNote">每天看經文、理解意思、建立圖像、遮字輸出，再用闖關打卡守住節奏。</p>
+      <div class="course-picker" id="coursePicker" aria-label="選擇經典">
+        <button class="is-active" type="button" data-course="dao">
+          <strong>道德經</strong>
+          <span>81 章</span>
+        </button>
+        <button type="button" data-course="diamond">
+          <strong>金剛經</strong>
+          <span>32 品</span>
+        </button>
+      </div>
+      <label>
+        <span>地區</span>
+        <input id="playerRegionInput" type="text" maxlength="18" autocomplete="address-level2" placeholder="例如：台北、台中、香港、上海">
+      </label>
+      <label>
+        <span>玩家暱稱</span>
+        <input id="playerNameInput" type="text" maxlength="24" autocomplete="name" placeholder="輸入你的名字">
+      </label>
+      <button class="primary-action" type="submit">開始今日背誦</button>
+      <div class="player-select" id="playerSelect"></div>
+    </form>
+  </section>
+
+  <div class="game-shell is-hidden" id="gameShell">
+    <aside class="side-rail" aria-label="主選單">
+      <div class="brand-mark">道</div>
+      <button class="rail-button is-active" data-view="quest"><span>今日背誦</span></button>
+      <button class="rail-button" data-view="cards"><span>記憶卡</span></button>
+      <button class="rail-button" data-view="map"><span>闖關地圖</span></button>
+      <button class="rail-button" data-view="team"><span>團隊榜</span></button>
+      <button class="rail-button" data-view="scripture"><span>經文區</span></button>
+      <button class="rail-button" data-view="mistakes"><span>錯題本</span></button>
+      <button class="rail-button logout-rail" id="switchPlayer"><span>登出</span></button>
+    </aside>
+
+    <main>
+      <section class="hero-zone">
+        <img id="heroImage" src="assets/ritual-banner.webp" alt="水墨書桌與經卷">
+        <div class="hero-shade"></div>
+        <div class="hero-content">
+          <p class="eyebrow">背誦教練</p>
+          <h2 id="heroTitle">第 1-2 章</h2>
+          <p id="heroSubtitle">我是每天靠近道的人。</p>
+        </div>
+        <div class="player-hud">
+          <div class="avatar-orb" id="avatarOrb">道</div>
+          <div>
+            <strong id="playerName">玩家</strong>
+            <span id="playerRank">初入玄門</span>
+          </div>
+          <div class="hud-actions">
+            <button class="small-button lang-toggle" type="button" data-lang-toggle>語文：繁</button>
+            <button id="syncNow" class="small-button">同步</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats-row" aria-label="玩家狀態">
+        <article class="stat-card">
+          <span>等級</span>
+          <strong id="levelText">Lv.1</strong>
+          <div class="xp-track"><div id="xpFill"></div></div>
+        </article>
+        <article class="stat-card">
+          <span>經驗</span>
+          <strong id="xpText">0 XP</strong>
+        </article>
+        <article class="stat-card">
+          <span>完成</span>
+          <strong id="doneText">0/60</strong>
+        </article>
+        <article class="stat-card">
+          <span>連勝</span>
+          <strong id="streakText">0 天</strong>
+        </article>
+      </section>
+
+      <section class="view is-visible" id="view-quest">
+        <div class="view-head">
+          <div>
+            <p class="eyebrow">Today's Coach</p>
+            <h2 id="questTitle">D01</h2>
+          </div>
+          <div class="day-controls">
+            <button class="icon-button" id="prevDay" aria-label="前一關">‹</button>
+            <button class="icon-button" id="nextDay" aria-label="下一關">›</button>
+          </div>
+        </div>
+
+        <article class="step-coach">
+          <div class="stage-top">
+            <div>
+              <p class="eyebrow" id="stageEyebrow">第一階段：理解輸入</p>
+              <h3 id="stageTitle">原文朗讀</h3>
+            </div>
+            <span id="stageCounter">1/10</span>
+          </div>
+          <div class="stage-progress" id="stageProgress"></div>
+          <div class="stage-content" id="stageContent"></div>
+          <div class="stage-actions">
+            <select id="stageJump" class="stage-jump" aria-label="跳到小關"></select>
+            <button class="plain-button quick-scripture" id="stageScripture" type="button" data-action="go-stage" data-stage="0">回原文朗讀</button>
+            <button class="plain-button" id="stageBack">上一步</button>
+            <button class="secondary-action" id="stageDone">確認通關</button>
+            <button class="primary-action" id="stageNext">下一步</button>
+          </div>
+        </article>
+
+        <section class="today-support">
+          <article class="support-panel reference-panel">
+            <div class="panel-head">
+              <h3>背誦工作台</h3>
+              <span id="todaySupportCount">0/12</span>
+            </div>
+            <div id="todaySupportSummary" class="progress-summary"></div>
+            <div id="memorySummary" class="memory-summary"></div>
+          </article>
+
+          <article class="mistake-panel mistake-studio">
+            <div class="panel-head">
+              <h3>錯句本</h3>
+              <span id="mistakeCount">0 張錯句卡</span>
+            </div>
+            <div class="mistake-form">
+              <input id="mistakeInput" type="text" maxlength="300" placeholder="輸入卡住、漏掉、顛倒的句子">
+              <button id="saveMistake" class="primary-action">加入</button>
+            </div>
+            <div id="mistakeList" class="mistake-list"></div>
+          </article>
+        </section>
+
+        <div id="dailyMastery" class="daily-mastery"></div>
+
+        <details class="review-recovery-panel">
+          <summary class="panel-head">
+            <div>
+              <h3>複習回收</h3>
+              <p>需要時展開。每天複習前面 3 章，照闖關節奏把舊章叫回來。</p>
+            </div>
+            <span id="reviewCount">0 組</span>
+          </summary>
+          <div id="reviewList" class="review-list review-recovery-list"></div>
+        </details>
+
+        <div class="coach-layout">
+          <article class="scripture-panel">
+            <div class="panel-head">
+              <h3>今日原文</h3>
+              <span id="scriptureBadge">第 1 章</span>
+            </div>
+            <div id="scriptureText" class="scripture-text"></div>
+          </article>
+
+          <article class="coach-panel">
+            <div class="panel-head">
+              <h3>先懂再背</h3>
+              <span>費曼理解</span>
+            </div>
+            <p id="plainMeaning" class="coach-copy"></p>
+            <div id="coreIdea" class="core-idea"></div>
+          </article>
+        </div>
+
+        <div class="memory-board">
+          <article class="memory-card visual-card">
+            <div class="panel-head">
+              <h3>圖像記憶</h3>
+              <span>把抽象變畫面</span>
+            </div>
+            <div id="imageMemory" class="image-memory"></div>
+          </article>
+
+          <article class="memory-card">
+            <div class="panel-head">
+              <h3>記憶火車</h3>
+              <span>背誦口訣</span>
+            </div>
+            <div id="keywordChain" class="keyword-chain"></div>
+          </article>
+
+          <article class="memory-card">
+            <div class="panel-head">
+              <h3>分段理解</h3>
+              <span>一塊一塊吃掉</span>
+            </div>
+            <div id="chunkList" class="chunk-list"></div>
+          </article>
+        </div>
+
+        <article class="practice-panel">
+          <div class="panel-head">
+            <h3>真正開始背</h3>
+            <span>遮字、接龍、盲背</span>
+          </div>
+          <div id="practiceSteps" class="practice-steps"></div>
+        </article>
+
+        <div class="quest-grid">
+          <article class="quest-card main-quest">
+            <div class="panel-head">
+              <h3>今日完成度</h3>
+              <span id="phaseText">新背期</span>
+            </div>
+            <div class="energy-ring">
+              <svg viewBox="0 0 140 140">
+                <circle class="ring-track" cx="70" cy="70" r="58"></circle>
+                <circle class="ring-fill" id="ringFill" cx="70" cy="70" r="58"></circle>
+              </svg>
+              <div>
+                <strong id="percentText">0%</strong>
+                <span id="energyHint">開始就有能量</span>
+              </div>
+            </div>
+            <button id="tinyStart" class="primary-action">2 分鐘啟動</button>
+            <button id="finishLevel" class="secondary-action">一鍵完成本關</button>
+          </article>
+
+          <article class="quest-card">
+            <div class="panel-head">
+              <h3>60 分鐘背誦任務</h3>
+              <span>35-45 分鐘</span>
+            </div>
+            <div class="task-list" id="morningTasks"></div>
+          </article>
+
+          <article class="quest-card">
+            <div class="panel-head">
+              <h3>輸出檢查</h3>
+              <span>25-35 分鐘</span>
+            </div>
+            <div class="task-list" id="eveningTasks"></div>
+          </article>
+        </div>
+
+        <div class="quest-grid lower-grid">
+          <article class="quest-card trial-card">
+            <div class="panel-head">
+              <h3>隨機小考</h3>
+              <span id="trialType">章號卡</span>
+            </div>
+            <div class="trial-body" id="trialPrompt">第 1-2 章的主題？</div>
+            <button id="nextTrial" class="secondary-action">換一題</button>
+          </article>
+
+          <article class="quest-card">
+            <div class="panel-head">
+              <h3>今天要複習的舊章</h3>
+              <span>回收區</span>
+            </div>
+            <div class="review-list"></div>
+          </article>
+
+          <article class="quest-card feynman-card">
+            <div class="panel-head">
+              <h3>費曼輸出</h3>
+              <span>一句話</span>
+            </div>
+            <textarea id="feynmanNote" rows="5" placeholder="把今天的章講成一句你自己聽得懂的話。"></textarea>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-map">
+        <div class="view-head">
+          <div>
+            <p class="eyebrow">Map</p>
+            <h2>闖關地圖</h2>
+          </div>
+          <div id="badgeShelf" class="badge-shelf"></div>
+        </div>
+        <div class="map-mode-tabs" aria-label="道德經闖關版本">
+          <button class="is-active" type="button" data-action="map-mode" data-map-mode="elite">初階關卡</button>
+          <button type="button" data-action="map-mode" data-map-mode="advanced">進階關卡</button>
+          <button type="button" data-action="map-mode" data-map-mode="beginner">高階關卡</button>
+        </div>
+        <div class="map-rules" id="mapRules"></div>
+        <div class="map-board" id="mapBoard"></div>
+      </section>
+
+      <section class="view" id="view-scripture">
+        <div class="view-head">
+          <div>
+            <p class="eyebrow">Scripture</p>
+            <h2>經文區</h2>
+            <p class="view-note">講課時快速查原文、跳章節、播放本章或本品。</p>
+          </div>
+        </div>
+        <div class="diamond-fulltext" id="diamondFullText"></div>
+      </section>
+
+      <section class="view" id="view-mistakes">
+        <div class="view-head">
+          <div>
+            <p class="eyebrow">Weak List</p>
+            <h2>錯題本</h2>
+            <p class="view-note">低於三星的章節會集中在這裡，補到四星以上才離開。</p>
+          </div>
+        </div>
+        <div id="weakNotebookList" class="weak-notebook-list"></div>
+      </section>
+
+      <section class="view" id="view-team">
+        <div class="view-head">
+          <div>
+            <p class="eyebrow">Team</p>
+            <h2>團隊排行榜</h2>
+            <p class="view-note">道鏡共修</p>
+          </div>
+          <button id="refreshTeam" class="plain-button">刷新</button>
+        </div>
+        <div class="leaderboard" id="leaderboard"></div>
+      </section>
+
+      <section class="view" id="view-cards">
+        <div class="view-head">
+          <div>
+            <p class="eyebrow">Cards</p>
+            <h2>記憶卡與錯句</h2>
+          </div>
+        </div>
+        <div class="template-grid" id="templateGrid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
