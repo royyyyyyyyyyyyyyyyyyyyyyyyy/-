@@ -1,10 +1,11 @@
-name: Deploy HeavenBorn Meeting to GitHub Pages
+name: Deploy HeavenBorn + Paul Acts Atlas to GitHub Pages
 
 on:
   push:
     branches: ["main"]
     paths:
       - "heavenborn-meeting/**"
+      - "paul-acts-atlas/**"
       - ".github/workflows/heavenborn-pages.yml"
   workflow_dispatch:
 
@@ -14,7 +15,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "heavenborn-pages"
+  group: "github-pages"
   cancel-in-progress: true
 
 jobs:
@@ -26,14 +27,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
           enablement: true
-      - name: Upload HeavenBorn meeting
+
+      - name: Assemble combined site
+        run: |
+          rm -rf _site
+          mkdir -p _site/paul-acts-atlas
+          cp -a heavenborn-meeting/. _site/
+          cat paul-acts-atlas/part-*.txt | base64 -d > /tmp/paul-site.zip
+          unzip -q /tmp/paul-site.zip -d _site/paul-acts-atlas
+
+      - name: Upload combined site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: "heavenborn-meeting"
+          path: "_site"
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
