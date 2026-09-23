@@ -1,0 +1,44 @@
+/* === PAUL ATLAS v11 · GUIDED STORY MODE === */
+.guided-tour{display:none;max-width:1180px;margin:auto;padding:28px 22px 0}
+.guided-tour.active{display:block;animation:simpleFade .25s ease}
+.tour-shell{border:1px solid rgba(135,103,65,.16);border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 24px 70px rgba(73,54,33,.08)}
+.tour-stage{position:relative;min-height:560px;overflow:hidden;background:#17130f;color:#fff}
+.tour-stage-bg{position:absolute;inset:0;transition:background .35s ease}
+.tour-stage-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(17,14,12,.94) 0%,rgba(17,14,12,.72) 52%,rgba(17,14,12,.28) 100%)}
+.tour-grain{position:absolute;inset:0;opacity:.18;pointer-events:none;background:
+linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:34px 34px}
+.tour-copy{position:relative;z-index:3;max-width:720px;padding:72px 54px 58px}
+.tour-kicker{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;font-size:11px;letter-spacing:.1em;color:#e8c690;font-weight:900}
+.tour-kicker span{padding:5px 8px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.04)}
+.tour-copy h2{font:800 clamp(42px,6vw,72px)/1 Georgia,"Noto Serif TC",serif;margin:0 0 14px;letter-spacing:-.035em}
+.tour-copy .tour-now{font-size:16px;line-height:1.75;color:rgba(255,255,255,.78);max-width:650px}
+.tour-memory{margin-top:22px;padding:14px 16px;border-left:3px solid #d7a85d;background:rgba(255,255,255,.06);border-radius:0 14px 14px 0}
+.tour-memory b{display:block;color:#f3d8aa;margin-bottom:4px}.tour-memory span{font-size:13px;color:rgba(255,255,255,.76)}
+.tour-route-next{margin-top:20px;display:flex;align-items:center;gap:8px;font-size:12px;color:#d8cbbb}.tour-route-next i{width:30px;height:1px;background:rgba(255,255,255,.28)}
+.tour-visual{position:absolute;right:0;top:0;width:44%;height:100%;z-index:1;opacity:.9}
+.tour-visual:before,.tour-visual:after{content:"";position:absolute}
+.tour-visual.city:before{right:10%;bottom:13%;width:72%;height:48%;border-bottom:16px solid rgba(255,255,255,.07);background:
+linear-gradient(90deg,transparent 0 8%,rgba(255,255,255,.08) 8% 13%,transparent 13% 24%,rgba(255,255,255,.07) 24% 29%,transparent 29% 43%,rgba(255,255,255,.06) 43% 48%,transparent 48%)}
+.tour-visual.light:before{width:260px;height:260px;border-radius:50%;right:11%;top:12%;background:radial-gradient(circle,#fff5cb 0%,rgba(244,216,148,.27) 34%,transparent 68%);filter:blur(2px)}
+.tour-visual.light:after{right:30%;top:4%;width:3px;height:68%;background:linear-gradient(#fff5d8,transparent);transform:rotate(25deg);box-shadow:0 0 28px #f4d28c}
+.tour-visual.ship:before{content:"⛵";right:24%;bottom:24%;font-size:92px;filter:grayscale(1) brightness(.82);animation:v11boat 3.5s ease-in-out infinite}
+.tour-visual.ship:after{left:0;right:0;bottom:-7%;height:38%;background:linear-gradient(180deg,#193440,#0e1d24);animation:v11wave 4s ease-in-out infinite}
+.tour-visual.prison:before{inset:0;background:repeating-linear-gradient(90deg,transparent 0 56px,rgba(0,0,0,.68) 57px 73px);opacity:.65}
+.tour-visual.rome:before{right:12%;bottom:12%;width:58%;height:58%;border:20px solid rgba(255,255,255,.08);border-bottom-width:30px;border-radius:48% 48% 0 0}
+.tour-controls{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:15px 18px;border-top:1px solid #e5dbcc;background:#fff}
+.tour-controls button{border:1px solid #dfd3c3;background:#fff;padding:10px 13px;border-radius:11px;font-weight:800;cursor:pointer}
+.tour-controls button.primary{background:#231f1a;color:#fff;border-color:#231f1a}
+.tour-progress-wrap{min-width:0}
+.tour-progress-line{height:5px;border-radius:999px;background:#eee5d9;overflow:hidden}.tour-progress-line i{display:block;height:100%;width:12.5%;background:linear-gradient(90deg,#8c6030,#c29150);transition:width .3s ease}
+.tour-progress-label{display:flex;justify-content:space-between;gap:8px;font-size:10px;color:#887d70;margin-top:5px}
+.tour-mini-map{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;padding:13px 18px 16px;background:#fff}
+.tour-mini-map button{border:0;background:transparent;padding:4px;cursor:pointer;color:#948777;font-size:10px;text-align:center}
+.tour-mini-map button i{display:block;width:10px;height:10px;border-radius:50%;margin:0 auto 4px;background:#d8cbbc}
+.tour-mini-map button.active{color:#3c3023;font-weight:900}.tour-mini-map button.active i{background:#a87638;box-shadow:0 0 0 4px #f3e8d8}
+.start-tour-btn{position:relative;overflow:hidden}
+.start-tour-btn:before{content:"▶";margin-right:7px}
+@keyframes v11wave{50%{transform:translateY(-10px) scaleY(1.05)}}@keyframes v11boat{50%{transform:translateY(-8px) rotate(-4deg)}}
+@media(max-width:760px){
+ .guided-tour{padding-left:14px;padding-right:14px}.tour-stage{min-height:520px}.tour-copy{padding:48px 24px 42px;max-width:100%}.tour-copy h2{font-size:46px}.tour-visual{width:100%;opacity:.28}.tour-stage-bg:after{background:linear-gradient(180deg,rgba(17,14,12,.82),rgba(17,14,12,.92))}.tour-controls{grid-template-columns:1fr 1fr}.tour-progress-wrap{grid-column:1/-1;grid-row:1}.tour-mini-map{grid-template-columns:repeat(4,1fr);row-gap:8px}
+}
