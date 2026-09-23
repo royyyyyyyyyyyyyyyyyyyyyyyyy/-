@@ -1,5 +1,5 @@
 {
-  "buildCommand": "rm -rf public && mkdir -p public && cat paul-acts-atlas/part-*.txt | base64 -d > /tmp/paul-site.zip && unzip -q /tmp/paul-site.zip -d public && node paul-acts-atlas/patch-v10.cjs",
+  "buildCommand": "rm -rf public && mkdir -p public && cat paul-acts-atlas/part-*.txt | base64 -d > /tmp/paul-site.zip && unzip -q /tmp/paul-site.zip -d public && node paul-acts-atlas/patch-v11.cjs",
   "outputDirectory": "public",
   "cleanUrls": false,
   "trailingSlash": false,
