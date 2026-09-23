@@ -1,0 +1,31 @@
+/* === PAUL ATLAS v12 · VOICE NARRATION === */
+.voice-guide-bar{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:12px 16px;border-top:1px solid #e6dccd;background:#fbf7f1
+}
+.voice-guide-bar strong{font-size:12px;margin-right:auto;color:#3d3125}
+.voice-guide-bar button,.voice-guide-bar select{
+  min-height:40px;border:1px solid #dacdbc;background:#fff;color:#34291f;
+  border-radius:11px;padding:8px 11px;font-weight:800;cursor:pointer
+}
+.voice-guide-bar button.is-active{background:#28221c;color:#fff;border-color:#28221c}
+.voice-guide-bar select{font-weight:700;font-size:12px}
+.voice-guide-status{width:100%;font-size:11px;color:#8b7c6c;line-height:1.45}
+.voice-guide-status.is-speaking{color:#8b5d27;font-weight:800}
+.voice-wave{display:inline-flex;align-items:end;gap:2px;height:13px;margin-right:5px;vertical-align:-1px}
+.voice-wave i{display:block;width:2px;height:4px;border-radius:2px;background:#b07b3b}
+.voice-guide-status.is-speaking .voice-wave i:nth-child(1){animation:v12voice .6s ease-in-out infinite}
+.voice-guide-status.is-speaking .voice-wave i:nth-child(2){animation:v12voice .6s .12s ease-in-out infinite}
+.voice-guide-status.is-speaking .voice-wave i:nth-child(3){animation:v12voice .6s .24s ease-in-out infinite}
+@keyframes v12voice{50%{height:12px}}
+.read-inline{
+  display:inline-flex;align-items:center;gap:5px;border:1px solid #ded1c0;background:#fff;
+  padding:8px 10px;border-radius:10px;font-weight:800;font-size:12px;cursor:pointer
+}
+.chapter-voice-row,.book-voice-row{display:flex;justify-content:flex-end;margin:0 0 10px}
+.tour-controls .tour-read-main{background:#8b6334;color:#fff;border-color:#8b6334}
+@media(max-width:620px){
+  .voice-guide-bar strong{width:100%;margin-bottom:2px}
+  .voice-guide-bar button{flex:1}
+  .voice-guide-bar select{flex:1;min-width:110px}
+}
