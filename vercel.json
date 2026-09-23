@@ -1,5 +1,5 @@
 {
-  "buildCommand": "rm -rf public && mkdir -p public && cat paul-acts-atlas/part-*.txt | base64 -d > /tmp/paul-site.zip && unzip -q /tmp/paul-site.zip -d public && cp paul-acts-atlas/simple-v7.css public/simple-v7.css && cp paul-acts-atlas/simple-v7.js public/simple-v7.js && sed -i 's#</head>#<link rel=\"stylesheet\" href=\"/simple-v7.css\"></head>#' public/index.html && sed -i 's#</body>#<script src=\"/simple-v7.js\"></script></body>#' public/index.html",
+  "buildCommand": "rm -rf public && mkdir -p public && cat paul-acts-atlas/part-*.txt | base64 -d > /tmp/paul-site.zip && unzip -q /tmp/paul-site.zip -d public && node paul-acts-atlas/patch-v7.cjs",
   "outputDirectory": "public",
   "cleanUrls": false,
   "trailingSlash": false,
